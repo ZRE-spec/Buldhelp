@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const terminalLines = [
-  { text: "Initializing BuildGuide v2.0...", delay: 0 },
+  { text: "Initializing EZBuild v2.0...", delay: 0 },
   { text: "Scanning component database...", delay: 800 },
   { text: "Loading build protocols...", delay: 1600 },
   { text: "> Step 1: Install CPU", delay: 2400, highlight: true },
@@ -48,7 +48,7 @@ const TerminalAnimation = () => {
             <div className="w-3 h-3 rounded-full bg-warning/70" />
             <div className="w-3 h-3 rounded-full bg-success/70" />
           </div>
-          <span className="text-xs font-mono text-muted-foreground ml-2">buildguide.exe</span>
+          <span className="text-xs font-mono text-muted-foreground ml-2">EZBuild.exe</span>
         </div>
         
         {/* Terminal content */}

@@ -5,7 +5,6 @@ const Header = () => {
   const location = useLocation();
   
   const navLinks = [
-    { href: "/#how-it-works", label: "How it Works" },
     { href: "/#about", label: "About" },
   ];
 
@@ -21,7 +20,7 @@ const Header = () => {
             <div className="absolute inset-0 bg-primary/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
           <span className="tracking-tight">
-            <span className="text-primary">Build</span>Guide
+            <span className="text-primary">EZ</span>Build
           </span>
         </Link>
         

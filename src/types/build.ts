@@ -16,7 +16,7 @@ export interface BuildStep {
   warning?: string;
 }
 
-export interface BuildGuide {
+export interface EZBuild {
   components: BuildComponents;
   steps: BuildStep[];
 }

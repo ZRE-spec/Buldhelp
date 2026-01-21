@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import TerminalAnimation from "./TerminalAnimation";
 
 const Hero = () => {
@@ -35,13 +35,6 @@ const Hero = () => {
                   Start Your Build
                   <ArrowRight className="ml-1 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
-              </Button>
-              
-              <Button asChild variant="hero-outline" size="lg">
-                <a href="#how-it-works">
-                  <Play className="mr-1 h-4 w-4 fill-current" />
-                  Watch how it works
-                </a>
               </Button>
             </div>
           </div>

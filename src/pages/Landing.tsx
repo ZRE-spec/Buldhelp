@@ -17,7 +17,7 @@ const Landing = () => {
           <div className="container-tight text-center">
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground font-mono">
               <Terminal className="h-4 w-4 text-primary" />
-              <span>© 2026 BuildGuide</span>
+              <span>© 2026 EZBuild</span>
               <span className="text-primary">|</span>
               <span>Built for builders</span>
             </div>

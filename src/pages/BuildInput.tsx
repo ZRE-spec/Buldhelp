@@ -91,17 +91,19 @@ const BuildInput = () => {
                   variant="hero" 
                   size="lg" 
                   className="w-full sm:w-auto group font-mono"
+                  disabled={filledCount !== componentFields.length}
                 >
-                  <span>Generate Build Guide</span>
+                  <span>Generate EZBuild Guide</span>
                   <Crosshair className="ml-2 h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
                 </Button>
                 
-                {filledCount > 0 && (
-                  <span className="text-sm font-mono text-muted-foreground">
-                    <span className="text-success">{filledCount}</span>
-                    <span className="text-border mx-1">/</span>
-                    <span>{componentFields.length}</span>
-                    <span className="ml-2 text-muted-foreground/70">slots configured</span>
+                {filledCount !== componentFields.length ? (
+                  <span className="text-sm font-mono text-amber-600">
+                    <span className="text-amber-600">Complete all fields to proceed</span>
+                  </span>
+                ) : (
+                  <span className="text-sm font-mono text-success">
+                    <span className="text-success">✓ All fields complete</span>
                   </span>
                 )}
               </div>
