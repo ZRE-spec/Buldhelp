@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 
 const terminalLines = [
   { text: "Initializing EZBuild v2.0...", delay: 0 },
-  { text: "Scanning component database...", delay: 800 },
-  { text: "Loading build protocols...", delay: 1600 },
-  { text: "> Step 1: Install CPU", delay: 2400, highlight: true },
-  { text: "> Step 2: Mount CPU Cooler", delay: 3000, highlight: true },
-  { text: "> Step 3: Install RAM modules", delay: 3600, highlight: true },
-  { text: "Build guide ready.", delay: 4200, success: true },
+  { text: "Scanning component database...", delay: 1200 },
+  { text: "Loading build protocols...", delay: 2400 },
+  { text: "Build guide ready.", delay: 3600, success: true },
+  { text: "> Step 1: Install CPU", delay: 4800, highlight: true },
+  { text: "> Step 2: Mount CPU Cooler", delay: 5600, highlight: true },
+  { text: "> Step 3: Install RAM modules", delay: 6400, highlight: true },
 ];
 
 const TerminalAnimation = () => {
@@ -20,20 +20,8 @@ const TerminalAnimation = () => {
       }, line.delay);
     });
 
-    // Loop the animation
-    const resetTimer = setTimeout(() => {
-      setVisibleLines(0);
-      // Restart after a brief pause
-      setTimeout(() => {
-        terminalLines.forEach((line, index) => {
-          setTimeout(() => setVisibleLines(index + 1), line.delay);
-        });
-      }, 500);
-    }, 6000);
-
     return () => {
       timers.forEach(clearTimeout);
-      clearTimeout(resetTimer);
     };
   }, []);
 

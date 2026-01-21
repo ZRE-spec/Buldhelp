@@ -20,9 +20,11 @@ const Hero = () => {
           {/* Left side - Content */}
           <div className="text-center lg:text-left">
             <h1 className="font-mono text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight animate-fade-in">
-              <span className="text-glow-primary text-primary">Build Your PC.</span>
+              <span className="text-glow-primary text-primary">Build Your PC</span>
               <br />
-              <span className="text-muted-foreground">No Manuals. No QR Codes.</span>
+              <span className="text-muted-foreground">No Manuals</span>
+              <br />
+              <span className="text-muted-foreground">No QR Codes</span>
             </h1>
             
             <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 text-balance animate-fade-in" style={{ animationDelay: "0.1s" }}>
