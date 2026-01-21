@@ -16,7 +16,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-muted hover:text-foreground text-muted-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         // Hero CTA - prominent neon glow
-        hero: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg glow-primary hover:shadow-xl active:scale-[0.98] animate-pulse-glow",
+        hero: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg glow-primary hover:shadow-xl active:scale-[0.98]",
         // Secondary hero - outlined with glow on hover
         "hero-outline": "border border-primary/50 text-primary bg-transparent hover:bg-primary/10 hover:border-primary hover:glow-primary",
         // Muted for disabled-looking buttons

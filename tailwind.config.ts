@@ -102,11 +102,20 @@ export default {
           "50%": { opacity: "0" },
         },
         "pulse-glow": {
-          "0%, 100%": { 
+          "0%": { 
             boxShadow: "0 0 5px hsl(var(--primary) / 0.3), 0 0 20px hsl(var(--primary) / 0.2)" 
+          },
+          "25%": { 
+            boxShadow: "0 0 7px hsl(var(--primary) / 0.4), 0 0 25px hsl(var(--primary) / 0.25)" 
           },
           "50%": { 
             boxShadow: "0 0 10px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--primary) / 0.3)" 
+          },
+          "75%": { 
+            boxShadow: "0 0 7px hsl(var(--primary) / 0.4), 0 0 25px hsl(var(--primary) / 0.25)" 
+          },
+          "100%": { 
+            boxShadow: "0 0 5px hsl(var(--primary) / 0.3), 0 0 20px hsl(var(--primary) / 0.2)" 
           },
         },
         "scan": {
@@ -129,7 +138,7 @@ export default {
         "slide-in": "slide-in 0.3s ease-out",
         "typing": "typing 2s steps(30) forwards",
         "blink": "blink 1s infinite",
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 3s ease-in-out infinite",
         "scan": "scan 8s linear infinite",
         "flicker": "flicker 5s infinite",
       },
