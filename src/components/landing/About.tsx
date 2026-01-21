@@ -20,7 +20,7 @@ const About = () => {
                 <span className="text-foreground font-mono">EZBuild</span> generates a clear, ordered build guide based on your specific components—so you can focus on building, not searching.
               </p>
               <p className="text-sm text-primary font-mono">
-                Built by gamers. For gamers.
+                Built for ease.
               </p>
             </div>
           </div>

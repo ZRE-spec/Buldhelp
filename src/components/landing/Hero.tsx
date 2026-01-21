@@ -28,7 +28,7 @@ const Hero = () => {
             </h1>
             
             <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 text-balance animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              A guided, step-by-step PC build experience made for gamers.
+              A guided, step-by-step PC build experience made for ease.
             </p>
             
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>

@@ -4,7 +4,7 @@ import FeatureCard from "./FeatureCard";
 const features = [
   {
     icon: Gamepad2,
-    title: "Built for Gamers",
+    title: "Built for Ease",
     description: "No PDFs, no manufacturer fluff. Just clean, actionable build steps.",
   },
   {
