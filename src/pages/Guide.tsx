@@ -15,7 +15,7 @@ const Guide = () => {
   const navigate = useNavigate();
   const [components, setComponents] = useState<BuildComponents | null>(null);
   const [steps, setSteps] = useState<BuildStep[]>([]);
-  const [handsBusyMode, setHandsBusyMode] = useState(false);
+  const [handsBusyMode, setHandsBusyMode] = useState(true);
 
   useEffect(() => {
     const stored = sessionStorage.getItem("buildComponents");
@@ -29,7 +29,7 @@ const Guide = () => {
     navigate("/build");
   };
 
-  if (handsBusyMode) {
+  if (handsBusyMode && steps.length > 0) {
     return <HandsBusyMode steps={steps} onExit={() => setHandsBusyMode(false)} />;
   }
 
