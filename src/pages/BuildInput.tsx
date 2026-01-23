@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import ProgressIndicator from "@/components/build/ProgressIndicator";
+import BuildLoadingScreen from "@/components/build/BuildLoadingScreen";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle";
@@ -19,6 +20,7 @@ interface BuildConfiguration {
 
 const BuildInput = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [config, setConfig] = useState<BuildConfiguration>({
     platform: null,
     cooling: null,
@@ -45,12 +47,17 @@ const BuildInput = () => {
 
   const handleSubmit = () => {
     if (!config.platform || !config.cooling || !config.caseType) return;
+    setIsLoading(true);
+  };
+
+  const handleLoadingComplete = () => {
     sessionStorage.setItem("buildConfig", JSON.stringify(config));
     navigate("/guide");
   };
 
   return (
     <Layout>
+      <BuildLoadingScreen isVisible={isLoading} onComplete={handleLoadingComplete} />
       <div className="py-8 sm:py-12 grain">
         <div className="container-tight relative">
           {/* Header */}
