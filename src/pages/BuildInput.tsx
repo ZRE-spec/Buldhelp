@@ -1,47 +1,53 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
-import ComponentInput from "@/components/build/ComponentInput";
 import ProgressIndicator from "@/components/build/ProgressIndicator";
 import { Button } from "@/components/ui/button";
-import { BuildComponents } from "@/types/build";
-import { Crosshair, Cpu, CircuitBoard, Fan, MemoryStick, MonitorUp, HardDrive, Plug, Box } from "lucide-react";
+import { Card, CardContent, CardDescription } from "@/components/ui/card";
+import { Toggle } from "@/components/ui/toggle";
+import { Cpu, Zap, Box, Flame, Building2 } from "lucide-react";
 
-const componentFields: { key: keyof BuildComponents; label: string; placeholder: string; icon: typeof Cpu }[] = [
-  { key: "cpu", label: "CPU", placeholder: "e.g., AMD Ryzen 7 7800X3D", icon: Cpu },
-  { key: "motherboard", label: "Motherboard", placeholder: "e.g., ASUS ROG Strix B650E-F", icon: CircuitBoard },
-  { key: "cpuCooler", label: "Cooling", placeholder: "e.g., Noctua NH-D15", icon: Fan },
-  { key: "ram", label: "Memory", placeholder: "e.g., Corsair Vengeance 32GB DDR5", icon: MemoryStick },
-  { key: "gpu", label: "Graphics Card", placeholder: "e.g., NVIDIA GeForce RTX 4070", icon: MonitorUp },
-  { key: "storage", label: "Storage", placeholder: "e.g., Samsung 990 Pro 2TB NVMe", icon: HardDrive },
-  { key: "psu", label: "Power Supply", placeholder: "e.g., Corsair RM850x", icon: Plug },
-  { key: "case", label: "Case", placeholder: "e.g., Fractal Design North", icon: Box },
-];
+type Platform = "amd" | "intel" | null;
+type CoolingType = "air" | "liquid" | null;
+type CaseType = "standard" | "compact" | null;
+
+interface BuildConfiguration {
+  platform: Platform;
+  cooling: CoolingType;
+  caseType: CaseType;
+}
 
 const BuildInput = () => {
   const navigate = useNavigate();
-  const [components, setComponents] = useState<BuildComponents>({
-    cpu: "",
-    motherboard: "",
-    cpuCooler: "",
-    ram: "",
-    gpu: "",
-    storage: "",
-    psu: "",
-    case: "",
+  const [config, setConfig] = useState<BuildConfiguration>({
+    platform: null,
+    cooling: null,
+    caseType: null,
   });
 
-  const updateComponent = (key: keyof BuildComponents, value: string) => {
-    setComponents((prev) => ({ ...prev, [key]: value }));
+  const handlePlatformSelect = (platform: Platform) => {
+    setConfig((prev) => ({ ...prev, platform }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sessionStorage.setItem("buildComponents", JSON.stringify(components));
+  const toggleCooling = (type: CoolingType) => {
+    setConfig((prev) => ({ 
+      ...prev, 
+      cooling: prev.cooling === type ? null : type 
+    }));
+  };
+
+  const toggleCaseType = (type: CaseType) => {
+    setConfig((prev) => ({ 
+      ...prev, 
+      caseType: prev.caseType === type ? null : type 
+    }));
+  };
+
+  const handleSubmit = () => {
+    if (!config.platform) return;
+    sessionStorage.setItem("buildConfig", JSON.stringify(config));
     navigate("/guide");
   };
-
-  const filledCount = Object.values(components).filter(Boolean).length;
 
   return (
     <Layout>
@@ -52,63 +58,168 @@ const BuildInput = () => {
             <ProgressIndicator currentStep={1} totalSteps={2} />
           </div>
 
-          <div className="mb-8">
+          {/* Title Section */}
+          <div className="mb-12">
             <div className="flex items-center gap-3 mb-2">
-              <Crosshair className="h-6 w-6 text-primary" />
+              <Cpu className="h-6 w-6 text-primary" />
               <h1 className="font-mono text-2xl sm:text-3xl font-bold text-foreground">
-                Loadout Setup
+                Start Your PC Build
               </h1>
             </div>
             <p className="text-muted-foreground font-mono text-sm">
-              <span className="text-primary">{">"}</span> Configure your build components
+              <span className="text-primary">{">"}</span> Most PC builds follow the same steps. We only need a few details to personalize your guide.
             </p>
           </div>
 
-          {/* Component slots */}
-          <form onSubmit={handleSubmit} className="space-y-3">
-            {componentFields.map((field, index) => (
-              <div 
-                key={field.key} 
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 0.05}s` }}
+          {/* Platform Selection Section */}
+          <div className="mb-12">
+            <h2 className="font-mono text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+              <Zap className="h-4 w-4 text-primary" />
+              Platform Selection
+            </h2>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* AMD Card */}
+              <button
+                onClick={() => handlePlatformSelect("amd")}
+                className={`relative p-6 rounded-lg border-2 transition-all duration-200 cursor-pointer group ${
+                  config.platform === "amd"
+                    ? "border-primary bg-primary/10 shadow-lg shadow-primary/50"
+                    : "border-muted-foreground/30 bg-card hover:border-primary/50"
+                }`}
               >
-                <ComponentInput
-                  id={field.key}
-                  label={field.label}
-                  placeholder={field.placeholder}
-                  value={components[field.key]}
-                  onChange={(value) => updateComponent(field.key, value)}
-                  icon={field.icon}
-                />
-              </div>
-            ))}
-
-            {/* Submit section */}
-            <div className="pt-8">
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <Button 
-                  type="submit" 
-                  variant="hero" 
-                  size="lg" 
-                  className="w-full sm:w-auto group font-mono"
-                  disabled={filledCount !== componentFields.length}
-                >
-                  <span>Generate EZBuild Guide</span>
-                  <Crosshair className="ml-2 h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
-                </Button>
-                
-                {filledCount !== componentFields.length ? (
-                  <span className="text-sm font-mono text-amber-600">
-                    <span className="text-amber-600">Complete all fields to proceed</span>
-                  </span>
-                ) : (
-                  <span className="text-sm font-mono text-success">
-                    <span className="text-success">✓ All fields complete</span>
-                  </span>
+                <div className="text-left">
+                  <h3 className="font-mono font-bold text-foreground text-lg mb-2">
+                    AMD Build
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    For Ryzen based systems. Affects CPU installation and cooler mounting steps.
+                  </p>
+                </div>
+                {config.platform === "amd" && (
+                  <div className="absolute top-3 right-3">
+                    <div className="h-3 w-3 rounded-full bg-primary animate-pulse" />
+                  </div>
                 )}
+              </button>
+
+              {/* Intel Card */}
+              <button
+                onClick={() => handlePlatformSelect("intel")}
+                className={`relative p-6 rounded-lg border-2 transition-all duration-200 cursor-pointer group ${
+                  config.platform === "intel"
+                    ? "border-primary bg-primary/10 shadow-lg shadow-primary/50"
+                    : "border-muted-foreground/30 bg-card hover:border-primary/50"
+                }`}
+              >
+                <div className="text-left">
+                  <h3 className="font-mono font-bold text-foreground text-lg mb-2">
+                    Intel Build
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    For Intel Core systems. Affects CPU socket handling and cooler installation steps.
+                  </p>
+                </div>
+                {config.platform === "intel" && (
+                  <div className="absolute top-3 right-3">
+                    <div className="h-3 w-3 rounded-full bg-primary animate-pulse" />
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Optional Details Section */}
+          <div className="mb-12">
+            <h2 className="font-mono text-lg font-bold text-foreground mb-1 flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-primary" />
+              Optional Details
+            </h2>
+            <p className="text-sm text-muted-foreground font-mono mb-6">
+              <span className="text-primary">{">"}</span> These do not change the core steps, but we use them to give better tips.
+            </p>
+
+            {/* Cooling Type */}
+            <div className="mb-6">
+              <p className="text-sm font-mono font-semibold text-foreground mb-3">Cooling Type</p>
+              <div className="flex gap-3 flex-wrap">
+                <Toggle
+                  pressed={config.cooling === "air"}
+                  onPressedChange={() => toggleCooling("air")}
+                  className={`border transition-all ${
+                    config.cooling === "air"
+                      ? "border-primary bg-primary/20 text-primary"
+                      : "border-muted-foreground/30"
+                  }`}
+                >
+                  <Flame className="h-4 w-4 mr-2" />
+                  <span className="font-mono text-sm">Air Cooler</span>
+                </Toggle>
+
+                <Toggle
+                  pressed={config.cooling === "liquid"}
+                  onPressedChange={() => toggleCooling("liquid")}
+                  className={`border transition-all ${
+                    config.cooling === "liquid"
+                      ? "border-primary bg-primary/20 text-primary"
+                      : "border-muted-foreground/30"
+                  }`}
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  <span className="font-mono text-sm">Liquid Cooler (AIO)</span>
+                </Toggle>
               </div>
             </div>
-          </form>
+
+            {/* Case Type */}
+            <div className="mb-6">
+              <p className="text-sm font-mono font-semibold text-foreground mb-3">Case Type</p>
+              <div className="flex gap-3 flex-wrap">
+                <Toggle
+                  pressed={config.caseType === "standard"}
+                  onPressedChange={() => toggleCaseType("standard")}
+                  className={`border transition-all ${
+                    config.caseType === "standard"
+                      ? "border-primary bg-primary/20 text-primary"
+                      : "border-muted-foreground/30"
+                  }`}
+                >
+                  <Box className="h-4 w-4 mr-2" />
+                  <span className="font-mono text-sm">Standard Case</span>
+                </Toggle>
+
+                <Toggle
+                  pressed={config.caseType === "compact"}
+                  onPressedChange={() => toggleCaseType("compact")}
+                  className={`border transition-all ${
+                    config.caseType === "compact"
+                      ? "border-primary bg-primary/20 text-primary"
+                      : "border-muted-foreground/30"
+                  }`}
+                >
+                  <Building2 className="h-4 w-4 mr-2" />
+                  <span className="font-mono text-sm">Compact Case</span>
+                </Toggle>
+              </div>
+            </div>
+          </div>
+
+          {/* Submit Section */}
+          <div className="pt-4">
+            <Button 
+              onClick={handleSubmit}
+              variant="hero" 
+              size="lg" 
+              className="w-full font-mono group"
+              disabled={!config.platform}
+            >
+              <span>Generate My Build Guide</span>
+              <Cpu className="ml-2 h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
+            </Button>
+            <p className="text-xs font-mono text-muted-foreground text-center mt-3">
+              You will get a step by step guide tailored to your platform.
+            </p>
+          </div>
         </div>
       </div>
     </Layout>
