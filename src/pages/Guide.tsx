@@ -11,6 +11,13 @@ import { BuildComponents, BuildStep } from "@/types/build";
 import { generateMockSteps } from "@/data/mockGuide";
 import { Hand, Save, FileDown, ArrowLeft, Target, Crosshair } from "lucide-react";
 
+interface BuildConfiguration {
+  platform?: string;
+  cooling?: string;
+  storage?: string;
+  hasGPU?: boolean;
+}
+
 const Guide = () => {
   const navigate = useNavigate();
   const [components, setComponents] = useState<BuildComponents | null>(null);
@@ -22,7 +29,19 @@ const Guide = () => {
     if (stored) {
       setComponents(JSON.parse(stored));
     }
-    setSteps(generateMockSteps());
+    
+    let allSteps = generateMockSteps();
+    
+    // Filter out GPU step if hasGPU is false
+    const config = sessionStorage.getItem("buildConfig");
+    if (config) {
+      const buildConfig: BuildConfiguration = JSON.parse(config);
+      if (buildConfig.hasGPU === false) {
+        allSteps = allSteps.filter(step => step.id !== 12);
+      }
+    }
+    
+    setSteps(allSteps);
   }, []);
 
   const handleBack = () => {

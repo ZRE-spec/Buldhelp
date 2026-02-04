@@ -6,16 +6,17 @@ import BuildLoadingScreen from "@/components/build/BuildLoadingScreen";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle";
-import { Cpu, Zap, Box, Flame, Building2 } from "lucide-react";
+import { Cpu, Zap, HardDrive, Monitor } from "lucide-react";
 
 type Platform = "amd" | "intel" | null;
 type CoolingType = "air" | "liquid" | null;
-type CaseType = "standard" | "compact" | null;
+type StorageType = "nvme" | "sata" | null;
 
 interface BuildConfiguration {
   platform: Platform;
   cooling: CoolingType;
-  caseType: CaseType;
+  storage: StorageType;
+  hasGPU: boolean;
 }
 
 const BuildInput = () => {
@@ -24,7 +25,8 @@ const BuildInput = () => {
   const [config, setConfig] = useState<BuildConfiguration>({
     platform: null,
     cooling: null,
-    caseType: null,
+    storage: null,
+    hasGPU: true,
   });
 
   const handlePlatformSelect = (platform: Platform) => {
@@ -38,15 +40,22 @@ const BuildInput = () => {
     }));
   };
 
-  const toggleCaseType = (type: CaseType) => {
+  const toggleStorageType = (type: StorageType) => {
     setConfig((prev) => ({ 
       ...prev, 
-      caseType: prev.caseType === type ? null : type 
+      storage: prev.storage === type ? null : type 
+    }));
+  };
+
+  const toggleGPU = () => {
+    setConfig((prev) => ({ 
+      ...prev, 
+      hasGPU: !prev.hasGPU 
     }));
   };
 
   const handleSubmit = () => {
-    if (!config.platform || !config.cooling || !config.caseType) return;
+    if (!config.platform || !config.cooling || !config.storage) return;
     setIsLoading(true);
   };
 
@@ -168,32 +177,56 @@ const BuildInput = () => {
               </div>
             </div>
 
-            {/* Case Type */}
+            {/* Storage Type */}
             <div className="mb-6">
-              <p className="text-sm font-mono font-semibold text-foreground mb-3">Case Type</p>
+              <p className="text-sm font-mono font-semibold text-foreground mb-3 flex items-center gap-2">
+                <HardDrive className="h-4 w-4 text-primary" />
+                Storage Type
+              </p>
               <div className="flex gap-3 flex-wrap">
                 <Toggle
-                  pressed={config.caseType === "standard"}
-                  onPressedChange={() => toggleCaseType("standard")}
+                  pressed={config.storage === "nvme"}
+                  onPressedChange={() => toggleStorageType("nvme")}
                   className={`border transition-all ${
-                    config.caseType === "standard"
+                    config.storage === "nvme"
                       ? "border-primary bg-primary/20 text-primary"
                       : "border-muted-foreground/30"
                   }`}
                 >
-                  <span className="font-mono text-sm">Standard Case</span>
+                  <span className="font-mono text-sm">NVMe</span>
                 </Toggle>
 
                 <Toggle
-                  pressed={config.caseType === "compact"}
-                  onPressedChange={() => toggleCaseType("compact")}
+                  pressed={config.storage === "sata"}
+                  onPressedChange={() => toggleStorageType("sata")}
                   className={`border transition-all ${
-                    config.caseType === "compact"
+                    config.storage === "sata"
                       ? "border-primary bg-primary/20 text-primary"
                       : "border-muted-foreground/30"
                   }`}
                 >
-                  <span className="font-mono text-sm">Compact Case</span>
+                  <span className="font-mono text-sm">SATA</span>
+                </Toggle>
+              </div>
+            </div>
+
+            {/* Graphics Card Option */}
+            <div className="mb-6">
+              <p className="text-sm font-mono font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Monitor className="h-4 w-4 text-primary" />
+                Graphics Card
+              </p>
+              <div className="flex gap-3 flex-wrap">
+                <Toggle
+                  pressed={!config.hasGPU}
+                  onPressedChange={toggleGPU}
+                  className={`border transition-all ${
+                    !config.hasGPU
+                      ? "border-primary bg-primary/20 text-primary"
+                      : "border-muted-foreground/30"
+                  }`}
+                >
+                  <span className="font-mono text-sm">No Graphics Card</span>
                 </Toggle>
               </div>
             </div>
@@ -206,7 +239,7 @@ const BuildInput = () => {
               variant="hero" 
               size="lg" 
               className="w-full font-mono group"
-              disabled={!config.platform || !config.cooling || !config.caseType}
+              disabled={!config.platform || !config.cooling || !config.storage}
             >
               <span>Generate My Build Guide</span>
             </Button>
