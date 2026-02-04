@@ -37,7 +37,7 @@ const Guide = () => {
     if (config) {
       const buildConfig: BuildConfiguration = JSON.parse(config);
       if (buildConfig.hasGPU === false) {
-        allSteps = allSteps.filter(step => step.id !== 12);
+        allSteps = allSteps.filter(step => step.id !== 11);
       }
     }
     
